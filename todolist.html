@@ -39,8 +39,7 @@
             data() {
                 return {
                     taskList: [],
-                    taskInput: "",
-                    isVisibility: false
+                    taskInput: ""
                 }
             },
 
@@ -66,7 +65,7 @@
                     // clear form input
                     this.taskInput = ''
                 },
-                
+
                 selectTask(itemId) {
                     // get index position of object in array
                     const getTask = this.taskList.findIndex((item) => {

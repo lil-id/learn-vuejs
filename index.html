@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todolist</title>
+    <style>
+        .active {
+            text-decoration: line-through;
+        }
+    </style>
+</head>
+<body>
+    <h2>Daftar tugas</h2>
+    <div id="appVue">
+        <input type="text" placeholder="Tulis tugas..." style="margin-right: 3px;" v-model="taskInput">
+
+        <button @click="addTask()">Tambah</button>
+
+        <p v-if="!taskList.length">Belum ada tugas nih!</p>
+        
+        <!-- Looping data -->
+        <div v-else v-for="item in taskList" v-bind:key="item.id">
+            <p :class="{active: item.state}"><input @click="selectTask(item.id)" type="checkbox" style="margin-right: 5px;">
+                {{ item.text }}
+            </p>
+        </div>
+
+        <p>Tugas selesai: {{ taskFinish }} </p>
+
+    </div>
+    <script src="https://unpkg.com/vue@3"></script>
+
+    <script>
+
+        const { createApp } = Vue
+        const app = createApp({
+            data() {
+                return {
+                    taskList: [],
+                    taskInput: ""
+                }
+            },
+
+            computed: {
+                taskFinish() {
+                    return this.taskList.filter((item) => item.state == true).length
+                }
+            },
+
+            methods: {
+                addTask() {
+                    if (this.taskInput === '') {
+                        return;
+                    }
+                    else {
+                        this.taskList.push({
+                            id: Math.random(),
+                            text: this.taskInput,
+                            state: false
+                        })
+                    }
+
+                    // clear form input
+                    this.taskInput = ''
+                },
+
+                selectTask(itemId) {
+                    // get index position of object in array
+                    const getTask = this.taskList.findIndex((item) => {
+                        if (item.id == itemId) {
+                            return item.id
+                        }
+                    })
+                    
+                    // get the state from current objek
+                    if (this.taskList[getTask].state == false) {
+                        this.taskList[getTask].state = true
+                    }
+                    else {
+                        this.taskList[getTask].state = false
+                    }
+                }
+            }
+        })
+
+        app.mount('#appVue')
+
+    </script>
+</body>
+</html>

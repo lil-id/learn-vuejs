@@ -5,31 +5,49 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todolist</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
     <style>
         .active {
-            text-decoration: line-through;
+            /* text-decoration: line-through; */
+            opacity: 0.5;
         }
     </style>
 </head>
 <body>
-    <h2>Daftar tugas</h2>
     <div id="appVue">
-        <input type="text" placeholder="Tulis tugas..." style="margin-right: 3px;" v-model="taskInput">
+        <div class="container py-5" style="max-width: 800px">
+            <div class="py-5 text-center">
+                <i class="bi bi-check2-circle text-success" style="font-size: 57px;"></i>
+                <h2><b>Vue Todo</b></h2>
+                <p class="lead">The best todo-list software on the planet!</p>
+            </div>
 
-        <button @click="addTask()">Tambah</button>
+            <div v-if="!taskList.length" class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="bi bi-info-circle-fill mx-1"></i> Belum ada tugas nih!
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
 
-        <p v-if="!taskList.length">Belum ada tugas nih!</p>
-        
-        <!-- Looping data -->
-        <div v-else v-for="item in taskList" v-bind:key="item.id">
-            <p :class="{active: item.state}"><input @click="selectTask(item.id)" type="checkbox" style="margin-right: 5px;">
+            <form>
+                <div class="input-group mb-3">
+                    <input v-model="taskInput" type="text" name="todo" id="todo" required class="form-control form-control-lg"
+                        placeholder="Apa yang perlu kamu kerjakan?" aria-label="Apa yang perlu kamu kerjakan?">
+                        <button @click="addTask()" class="btn btn-success" id="add-todo" type="submit"><i class="bi bi-plus-lg me-2"></i>
+                        Tambah
+                    </button>
+                </div>
+            </form>
+
+            <div v-else v-for="item in taskList" v-bind:key="item.id" :class="{active: item.state}"
+                class="alert alert-info alert-dismissible fade show" role="alert" style="font-size: 22px;">
+                <i v-if="item.state == false" @click="selectTask(item.id)" class="bi bi-check-circle me-1" style="font-size: 22px;"></i> 
+                <i v-else="!item.state" @click="selectTask(item.id)" class="bi bi-check-circle-fill me-1" style="font-size: 22px;"></i>
                 {{ item.text }}
-            </p>
+            </div>
+            <p>Tugas selesai: {{ taskFinish }} </p>
         </div>
-
-        <p>Tugas selesai: {{ taskFinish }} </p>
-
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/vue@3"></script>
 
     <script>
